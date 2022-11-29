@@ -26,13 +26,12 @@ export class MongooseClinet {
         this.dbConnection.on("open", () => console.log("MongooseAdapter started"))
         this.dbConnection.on("error", (err) => console.log("Mongoose error :", err))
         this.dbConnection.on("close", () => console.log("Mongoose connection close "))
-        mongoose.connect(mongoAtlasUri, options)
+
+        await mongoose.connect(mongoAtlasUri, options)
     }
     async disconnect() {
         await this.dbConnection.close();
     }
 }
-
-
 
 export default new MongooseClinet()

@@ -1,10 +1,12 @@
+import mongoose from "mongoose"
+
 export interface LikeInputModel {
     likeStatus: LikeStatus
 }
 export interface LikesBdModel {
-    id:string
-    commentId:string
-    userId:string
+    id: string
+    commentId: string
+    userId: string
     myStatus: LikeStatus //	h11.LikeStatusstring Enum:    Array[3]
 
 }
@@ -13,3 +15,10 @@ export enum LikeStatus {
     Like = "Like",
     Dislike = "Dislike"
 }
+
+export const likeBdSchema = new mongoose.Schema<LikesBdModel>({
+    id: String,
+    commentId: String,
+    userId: String,
+    myStatus: LikeStatus //	h11.LikeStatusstring Enum:    Array[3]  
+})

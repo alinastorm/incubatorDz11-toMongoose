@@ -14,7 +14,7 @@ export enum SortDirectionsType {
     desc = -1,
 }
 
-export interface SearchPaginationModel<T = IObject> {
+export interface SearchPaginationMongoDbModel<T = IObject> {
     /**search Name Term
      * Default value : null
      */

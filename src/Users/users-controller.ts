@@ -2,17 +2,17 @@ import cryptoService from '../_common/services/crypto/crypto-service';
 import usersRepository from './users-repository';
 import { Filter, ObjectId } from 'mongodb';
 import authRepository from '../Auth/Authentication/auth-repository';
-import { UserBdModel, UserInputModel, UsersSearchPaginationModel, UserViewModel } from './users-types';
+import { UserBdModel, UserInputModel, UsersSearchPaginationMongoDbModel, UserViewModel } from './users-types';
 import { AuthViewModel } from '../Auth/Authentication/auth-types';
 import { BlogViewModel } from '../Blogs/blogs-types';
 import { HTTP_STATUSES, RequestWithBody, RequestWithParams, RequestWithQuery, ResponseWithBodyCode, ResponseWithCode } from '../_common/services/http/types';
-import { Paginator, SearchPaginationModel } from '../_common/abstractions/Repository/types';
+import { Paginator, SearchPaginationMongoDbModel } from '../_common/abstractions/Repository/repository-mongodb-types';
 
 
 class UserController {
 
     async readAllPagination(
-        req: RequestWithQuery<UsersSearchPaginationModel>,
+        req: RequestWithQuery<UsersSearchPaginationMongoDbModel>,
         res: ResponseWithBodyCode<Paginator<UserViewModel>, 200>
     ) {
 
@@ -21,7 +21,7 @@ class UserController {
         const filter: Filter<UserViewModel> = { $or: [] }
         if (searchEmailTerm) filter.$or?.push({ email: { $regex: searchEmailTerm, $options: 'i' } })
         if (searchLoginTerm) filter.$or?.push({ login: { $regex: searchLoginTerm, $options: 'i' } })
-        let query: SearchPaginationModel
+        let query: SearchPaginationMongoDbModel
         filter.$or?.length ?
             query = { pageNumber, pageSize, filter, sortBy, sortDirection } :
             query = { pageNumber, pageSize, sortBy, sortDirection }

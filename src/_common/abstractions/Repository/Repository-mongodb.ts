@@ -1,12 +1,12 @@
 import { IObject } from '../../types/types';
 import { Filter } from 'mongodb';
 import { AdapterType } from '../../services/mongoDb/types';
-import { Paginator, SearchPaginationModel } from './types';
+import { Paginator, SearchPaginationMongoDbModel } from './repository-mongodb-types';
 
 // const dataService = new DataService(mongoDbAdapter)
 
 
-class Repository {
+export class RepositoryMongoDb {
 
     constructor(private collectionName: string, private dataService: AdapterType) { }
 
@@ -14,7 +14,7 @@ class Repository {
         const result: T[] = await this.dataService.readAll(this.collectionName, filter)
         return result
     }
-    async readAllOrByPropPaginationSort<T>(data: SearchPaginationModel ) {
+    async readAllOrByPropPaginationSort<T>(data: SearchPaginationMongoDbModel ) {
         const { pageNumber, pageSize, sortBy, sortDirection, filter } = data 
         const result: Paginator<T> = await this.dataService.readAllOrByPropPaginationSort(this.collectionName, pageNumber, pageSize, sortBy, sortDirection, filter)
         return result
@@ -43,4 +43,3 @@ class Repository {
     }
 }
 
-export default Repository

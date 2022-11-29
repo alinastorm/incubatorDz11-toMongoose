@@ -1,10 +1,16 @@
-import mongoDbAdapter from '../../_common/services/mongoDb/mongoDb-adapter';
-import { AdapterType } from '../../_common/services/mongoDb/types';
-import Repository from '../../_common/abstractions/Repository/Repository';
+import mongoose, { Model } from 'mongoose';
+import { RepositoryMongoose } from '../../_common/abstractions/Repository/Repository-mongoose';
+import { RecoveryCodeBdModel, recoveryCodeSchema } from './recoveryPassword-types';
 
-class RecoveryPasswordRepository extends Repository {
-    constructor(collectionName: string, dataService: AdapterType) { super(collectionName, dataService) }
+
+
+
+
+
+
+class RecoveryPasswordRepository extends RepositoryMongoose<RecoveryCodeBdModel> {
+    constructor(model: Model<RecoveryCodeBdModel>) { super(model) }
+
 }
 
-
-export default new RecoveryPasswordRepository('recoverycodes', mongoDbAdapter)
+export default new RecoveryPasswordRepository(mongoose.model("recoverycodes", recoveryCodeSchema))

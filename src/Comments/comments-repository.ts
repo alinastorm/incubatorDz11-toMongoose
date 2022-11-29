@@ -1,18 +1,14 @@
-
-import Repository from '../_common/abstractions/Repository/Repository';
-import mongoDbAdapter from '../_common/services/mongoDb/mongoDb-adapter';
-import { AdapterType } from '../_common/services/mongoDb/types';
-
+import mongoose, { Model } from 'mongoose';
+import { RepositoryMongoose } from '../_common/abstractions/Repository/Repository-mongoose';
+import { CommentBdModel, commentBdSchema } from './comments-types';
 
 
-class CommentsRepository extends Repository {
-    constructor(collectionName: string, dataService: AdapterType) { super(collectionName, dataService) }
 
+class CommentsRepository extends RepositoryMongoose<CommentBdModel> {
+    constructor(model: Model<CommentBdModel>) { super(model) }
 }
 
-
-export default new CommentsRepository("comments", mongoDbAdapter)
-
+export default new CommentsRepository(mongoose.model("comments", commentBdSchema))
 
 
 

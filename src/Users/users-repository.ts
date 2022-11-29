@@ -1,14 +1,16 @@
+import mongoose, { Model } from 'mongoose';
 import authRepository from '../Auth/Authentication/auth-repository';
-import Repository from '../_common/abstractions/Repository/Repository';
-import { Filter } from 'mongodb';
-import mongoDbAdapter from '../_common/services/mongoDb/mongoDb-adapter';
 import { AuthViewModel } from '../Auth/Authentication/auth-types';
-import { AdapterType } from '../_common/services/mongoDb/types';
+import { RepositoryMongoose } from '../_common/abstractions/Repository/Repository-mongoose';
+import { IObject } from '../_common/types/types';
+import { UserBdModel, userBdSchema } from './users-types';
 
 
 
-class UserRepository extends Repository {
-    constructor(collectionName: string, dataService: AdapterType) { super(collectionName, dataService) }
+
+
+class UsersRepository extends RepositoryMongoose<UserBdModel> {
+    constructor(model: Model<UserBdModel>) { super(model) }
 
 
     async deleteOne(id: string) {
@@ -27,7 +29,8 @@ class UserRepository extends Repository {
 }
 
 
-export default new UserRepository('users', mongoDbAdapter)
+
+export default new UsersRepository(mongoose.model("users", userBdSchema))
 
 
 

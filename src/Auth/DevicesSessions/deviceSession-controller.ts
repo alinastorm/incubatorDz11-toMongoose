@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { HTTP_STATUSES, RequestWithBody, RequestWithCookies, RequestWithHeaders, RequestWithParams, ResponseWithBodyCode, ResponseWithCode, ResponseWithCookies } from '../../_common/services/http/types';
 import { DeviceBdModel, DeviceViewModel } from './deviceSession-types';
-import devicesRepository from './deviceSessions-repository';
+import devicesRepository from './deviceSession-repository';
 import { RefreshTokenPayloadModel } from '../Tokenization/tokens-types';
 import format from 'date-fns/add'
 import { LoginInputModel } from '../Authentication/auth-types';

@@ -1,40 +1,27 @@
-import { Filter } from 'mongodb';
 import postsRepository from '../Posts/posts-repository';
-import { PostViewModel } from '../Posts/posts-types';
-import mongoDbAdapter from '../_common/services/mongoDb/mongoDb-adapter';
-import { AdapterType } from '../_common/services/mongoDb/types';
 
-import Repository from '../_common/abstractions/Repository/Repository';
-import { BlogViewModel } from './blogs-types';
+import mongoose, { Model } from "mongoose"
+import { RepositoryMongoose } from '../_common/abstractions/Repository/Repository-mongoose';
+import { BlogBdModel, blogBdSchema } from './blogs-types';
 
 
 
 
-class BlogsRepository extends Repository {
-    constructor(collectionName: string, dataService: AdapterType) { super(collectionName, dataService) }
+class BlogsRepository extends RepositoryMongoose<BlogBdModel> {
+    constructor(model: Model<BlogBdModel>) { super(model) }
 
     async deleteOne(id: string): Promise<boolean> {
 
         const isBlogDeleted = await super.deleteOne(id)
         if (!isBlogDeleted) return false
 
-        const filter: Partial<PostViewModel> = { blogId: id }
-        const posts = await postsRepository.readAll<BlogViewModel>(filter)
+        const filter = { blogId: id }
+        const posts = await postsRepository.readAll(filter)
         posts.forEach(async ({ id }) => {
             await postsRepository.deleteOne(id)
         })
-
         return true
-
     }
 }
 
-
-export default new BlogsRepository('blogs', mongoDbAdapter)
-
-
-
-
-
-
-
+export default new BlogsRepository(mongoose.model("Blogs", blogBdSchema))

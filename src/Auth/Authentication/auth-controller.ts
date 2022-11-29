@@ -8,7 +8,7 @@ import authRepository from './auth-repository';
 import { AuthViewModel, LoginInputModel, LoginSuccessViewModel, MeViewModel } from './auth-types';
 import { v4 as uuidv4 } from 'uuid'
 import { DeviceBdModel } from '../DevicesSessions/deviceSession-types';
-import deviceSessionsRepository from "../DevicesSessions/deviceSessions-repository"
+import deviceSessionsRepository from "../DevicesSessions/deviceSession-repository"
 import { RefreshTokenPayloadModel } from '../Tokenization/tokens-types';
 import emailService from '../../_common/services/email/email-service';
 import { NextFunction } from 'express';

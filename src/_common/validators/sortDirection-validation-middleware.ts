@@ -1,5 +1,5 @@
 import { param, query } from 'express-validator';
-import { SortDirectionsType } from '../abstractions/Repository/types';
+import { SortDirectionsType } from '../abstractions/Repository/repository-mongodb-types';
 
 
 export const sortDirectionQueryValidationMiddleware = query('sortDirection')

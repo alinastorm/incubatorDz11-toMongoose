@@ -1,3 +1,5 @@
+import mongoose from "mongoose"
+
 export interface LoginInputModel {
     loginOrEmail: string
     password: string
@@ -33,3 +35,11 @@ export interface MeViewModel {
     login: string
     userId: string
 }
+
+export const authSchema = new mongoose.Schema<AuthBDModel>({
+    id: String,
+    userId: String,
+    /**  maxLength: 20 minLength: 6 */
+    passwordHash: String,
+    createdAt: String,
+})

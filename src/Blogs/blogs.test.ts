@@ -2,7 +2,7 @@ import request from "supertest"
 import mongoDbClient from "../_common/services/mongoDb/mongoDbClient"
 import httpService from "../_common/services/http/http-service"
 import { BlogInputModel, BlogViewModel } from "./blogs-types"
-import { Paginator } from "../_common/abstractions/Repository/types"
+import { Paginator } from "../_common/abstractions/Repository/repository-mongodb-types"
 import { PostInputModel, PostViewModel } from "../Posts/posts-types"
 
 

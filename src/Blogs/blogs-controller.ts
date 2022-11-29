@@ -3,10 +3,12 @@ import { Filter } from 'mongodb';
 
 import postsRepository from '../Posts/posts-repository';
 import blogsRepository from './blogs-repository';
-import { BlogInputModel, BlogViewModel } from './blogs-types';
+import { BlogBdModel, BlogInputModel, BlogViewModel } from './blogs-types';
 import { PostInputModel, PostViewModel } from '../Posts/posts-types';
 import { HTTP_STATUSES, RequestWithBody, RequestWithParams, RequestWithParamsBody, RequestWithParamsQuery, RequestWithQuery, ResponseWithBodyCode, ResponseWithCode } from '../_common/services/http/types';
-import { Paginator, SearchPaginationModel } from '../_common/abstractions/Repository/types';
+import { Paginator, SearchPaginationMongoDbModel } from '../_common/abstractions/Repository/repository-mongodb-types';
+import { SearchPaginationMongooseModel } from '../_common/abstractions/Repository/repository-mongoose-type';
+import { NoExtraProperties } from '../_common/types/types';
 
 
 
@@ -15,12 +17,13 @@ class BlogController {
 
     async readAllOrByNamePaginationSort(
         req: RequestWithQuery<{ searchNameTerm: string, pageNumber: number, pageSize: number, sortBy: keyof BlogViewModel, sortDirection: 1 | -1 }>,
-        res: ResponseWithBodyCode<Paginator<BlogViewModel[]>, 200>
+        res: ResponseWithBodyCode<Paginator<BlogViewModel>, 200>
     ) {
         const { searchNameTerm, pageNumber, pageSize, sortBy, sortDirection } = req.query
-        const query: SearchPaginationModel = { pageNumber, pageSize, sortBy, sortDirection }
+        const query: SearchPaginationMongooseModel = { pageNumber, pageSize, sortBy, sortDirection }
         if (searchNameTerm) query['filter'] = { name: { $regex: searchNameTerm, $options: 'i' } }
-        const result: Paginator<BlogViewModel[]> = await blogsRepository.readAllOrByPropPaginationSort(query)
+        const blogs: Paginator<BlogBdModel> = await blogsRepository.readAllOrByPropPaginationSort(query)
+        const result: NoExtraProperties<Paginator<BlogViewModel>, typeof blogs> = blogs
         res.status(HTTP_STATUSES.OK_200).json(result)
     }
     async createOne(
@@ -43,13 +46,12 @@ class BlogController {
         res: ResponseWithBodyCode<BlogViewModel, 200 | 404>
     ) {
         const id = req.params.blogId
-        const result = await blogsRepository.readOne<BlogViewModel>(id)
+        const result = await blogsRepository.readOne(id)
         if (!result) {
             return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
         }
         res.status(HTTP_STATUSES.OK_200).send(result)
     }
-
     async updateOne(
         req: RequestWithParams<{ blogId: string }>,
         res: ResponseWithCode<204 | 404>

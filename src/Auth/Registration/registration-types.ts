@@ -1,3 +1,5 @@
+import mongoose from "mongoose"
+
 export interface RegistrationCodeViewModel {
     id: string
     userId: string
@@ -15,3 +17,12 @@ export interface RegistrationEmailResending {
     /**Email of already registered but not confirmed user */
     email: string //    pattern: ^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$  
 }
+
+export const registrationCodeSchema = new mongoose.Schema<RegistrationCodeViewModel>({
+    id: String,
+    userId: String,
+    email: String,
+    code: String,
+    expirationDate: Date
+    // restartTime: Date
+})

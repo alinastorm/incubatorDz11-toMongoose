@@ -1,3 +1,5 @@
+import mongoose from "mongoose"
+
 export interface UserInputModel {
     login: string // maxLength: 10 minLength: 3
     password: string // maxLength: 20 minLength: 6
@@ -16,7 +18,7 @@ export interface UserBdModel {
     confirm:boolean //мое
     createdAt?: string //	TODO в дз не обязательный в интерфей
 }
-export interface UsersSearchPaginationModel {
+export interface UsersSearchPaginationMongoDbModel {
     /**Search term for user Login: Login should contains this term in any position
      * Default value : null
      */
@@ -42,3 +44,4 @@ export interface UsersSearchPaginationModel {
      */
     sortDirection: 1 | -1
 }
+export const userBdSchema = new mongoose.Schema<UserBdModel>({})

@@ -7,7 +7,7 @@ import postsRepository from '../Posts/posts-repository';
 import blogsRepository from '../Blogs/blogs-repository';
 import authRepository from '../Auth/Authentication/auth-repository';
 import { HTTP_STATUSES, ResponseWithCode } from '../_common/services/http/types';
-import devicesRepository from '../Auth/DevicesSessions/deviceSessions-repository';
+import devicesRepository from '../Auth/DevicesSessions/deviceSession-repository';
 import registrationCodesRepository from "../Auth/Registration/registration-repository"
 import recoveryPasswordRepository from '../Auth/RecoveryPassword/recoveryPassword-repository';
 import commentsRepository from '../Comments/comments-repository';

@@ -1,5 +1,5 @@
 import { Collection, Document, ObjectId, Filter } from 'mongodb'
-import { Paginator } from '../../abstractions/Repository/types';
+import { Paginator } from '../../abstractions/Repository/repository-mongodb-types';
 import { IObject } from '../../types/types';
 import { AdapterType } from './types';
 import mongoDbClient from "./mongoDbClient"

@@ -1,7 +1,7 @@
 import request from "supertest"
 import mongoDbClient from "../_common/services/mongoDb/mongoDbClient"
 import httpService from "../_common/services/http/http-service"
-import { Paginator } from "../_common/abstractions/Repository/types"
+import { Paginator } from "../_common/abstractions/Repository/repository-mongodb-types"
 import { CommentBdModel, CommentInputModel, CommentViewModel, LikesInfoViewModel } from "./comments-types"
 import commentsRepository from "./comments-repository"
 import { PostInputModel, PostViewModel } from "../Posts/posts-types"

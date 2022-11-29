@@ -1,7 +1,7 @@
 import { HTTP_STATUSES, RequestWithCookies, RequestWithHeaders, ResponseWithBodyCode, ResponseWithCode } from '../../_common/services/http/types';
 import { jwtTokenService } from '../../_common/services/token/jwtToken-service';
 
-import deviceSessionRepository from '../DevicesSessions/deviceSessions-repository';
+import deviceSessionRepository from '../DevicesSessions/deviceSession-repository';
 import { DeviceBdModel } from '../DevicesSessions/deviceSession-types';
 import { RefreshTokenPayloadModel } from './tokens-types';
 

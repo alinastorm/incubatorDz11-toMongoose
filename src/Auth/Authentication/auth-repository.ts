@@ -1,12 +1,12 @@
-import mongoDbAdapter from '../../_common/services/mongoDb/mongoDb-adapter';
-import { AdapterType } from '../../_common/services/mongoDb/types';
-import Repository from '../../_common/abstractions/Repository/Repository';
 import registrationCodeRepository from '../Registration/registration-repository';
-import {RegistrationCodeViewModel} from "../Registration/registration-types"
+import { RegistrationCodeViewModel } from "../Registration/registration-types"
+import mongoose, { Model } from 'mongoose';
+import { RepositoryMongoose } from '../../_common/abstractions/Repository/Repository-mongoose';
+import { AuthBDModel, authSchema } from './auth-types';
 
 /** Hash Password */
-class AuthRepository extends Repository {
-    constructor(collectionName: string, dataService: AdapterType) { super(collectionName, dataService) }
+class AuthRepository extends RepositoryMongoose<AuthBDModel> {
+    constructor(model: Model<AuthBDModel>) { super(model) }
 
     async deleteOne(id: string) {
         // Удаляем auth        
@@ -14,7 +14,7 @@ class AuthRepository extends Repository {
         if (!isDeleted) return false
         // Удаляем registration codes
         const filter: Partial<RegistrationCodeViewModel> = { userId: id }
-        const codes = await registrationCodeRepository.readAll<RegistrationCodeViewModel>(filter)
+        const codes = await registrationCodeRepository.readAll(filter)
         codes.forEach((code) => {
             registrationCodeRepository.deleteOne(code.id)
         })
@@ -23,4 +23,4 @@ class AuthRepository extends Repository {
 }
 
 
-export default new AuthRepository('auth', mongoDbAdapter)
+export default new AuthRepository(mongoose.model("auth", authSchema))

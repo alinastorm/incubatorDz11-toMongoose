@@ -6,7 +6,7 @@ import { CommentBdModel, CommentInputModel, CommentViewModel, LikesInfoViewModel
 import { HTTP_STATUSES, RequestWithAccessTokenJWTBearer, RequestWithBody, RequestWithHeaders, RequestWithParams, RequestWithParamsBody, RequestWithParamsQuery, ResponseWithBodyCode, ResponseWithCode } from '../_common/services/http/types';
 import { NoExtraProperties } from '../_common/types/types';
 import { LikesBdModel, LikeStatus } from '../Likes/like-types';
-import { Paginator, SearchPaginationModel } from '../_common/abstractions/Repository/types';
+import { Paginator, SearchPaginationMongoDbModel } from '../_common/abstractions/Repository/repository-mongodb-types';
 import { Filter } from 'mongodb';
 import postsRepository from '../Posts/posts-repository';
 import usersRepository from '../Users/users-repository';
@@ -61,7 +61,7 @@ class CommentsController {
         const { pageNumber, pageSize, sortBy, sortDirection } = req.query
         const postId = req.params.postId
         const filter: Filter<CommentBdModel> = { postId }
-        const query: SearchPaginationModel<CommentBdModel> = { pageNumber, pageSize, sortBy, sortDirection, filter }
+        const query: SearchPaginationMongoDbModel<CommentBdModel> = { pageNumber, pageSize, sortBy, sortDirection, filter }
         {
             //если есть acccess token
             const userId = req.user?.userId

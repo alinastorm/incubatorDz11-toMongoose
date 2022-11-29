@@ -1,3 +1,5 @@
+import mongoose from "mongoose"
+
 export interface BlogInputModel {
     name: string//    maxLength: 15
     description:string // maxLength: 500
@@ -17,3 +19,18 @@ export interface BlogViewModel {
     websiteUrl: string
     createdAt: string//TODO в дз не обязательный в интерфейсе
 }
+export interface BlogBdModel {
+    id: string
+    name: string// max 15 TODO вроде уже нет ограничения
+    description:string // maxLength: 500
+    websiteUrl: string
+    createdAt: string//TODO в дз не обязательный в интерфейсе
+}
+
+export const blogBdSchema = new mongoose.Schema<BlogBdModel>({
+    id: String,
+    name: String,// max 15 TODO вроде уже нет ограничения
+    description:String, // maxLength: 500
+    websiteUrl: String,
+    createdAt: String,//TODO в дз не обязательный в интерфейсе
+})

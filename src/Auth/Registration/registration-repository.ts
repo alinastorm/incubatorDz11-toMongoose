@@ -1,12 +1,14 @@
-import mongoDbAdapter from '../../_common/services/mongoDb/mongoDb-adapter';
-import { AdapterType } from '../../_common/services/mongoDb/types';
-import Repository from '../../_common/abstractions/Repository/Repository';
+import { registrationCodeSchema, RegistrationCodeViewModel } from './registration-types';
+import { RepositoryMongoose } from '../../_common/abstractions/Repository/Repository-mongoose';
+import mongoose, { Model } from 'mongoose';
+
+
+
+
 
 /** Коды email регистрации */
-class RegistrationCodesRepository extends Repository {
-    constructor(collectionName: string, dataService: AdapterType) { super(collectionName, dataService) }
-
+class RegistrationCodesRepository extends RepositoryMongoose<RegistrationCodeViewModel> {
+    constructor(model: Model<RegistrationCodeViewModel>) { super(model) }
 }
 
-
-export default new RegistrationCodesRepository('registrationcodes', mongoDbAdapter)
+export default new RegistrationCodesRepository(mongoose.model("registrationcodes", registrationCodeSchema))
