@@ -23,13 +23,13 @@ class AuthController {
         const { email, login, password } = req.body
 
         const filterLogin: Partial<UserViewModel> = { login }
-        const usersByLogin: UserViewModel[] = await usersRepository.readAll<UserViewModel>(filterLogin)
+        const usersByLogin: UserViewModel[] = await usersRepository.readAll(filterLogin)
         if (usersByLogin.length) {
             const result: APIErrorResult = { errorsMessages: [{ message: "login exist", field: "login" }] }
             return res.status(400).json(result)
         }
         const filterEmail: Partial<UserViewModel> = { email }
-        const usersByEmails: UserViewModel[] = await usersRepository.readAll<UserViewModel>(filterEmail)
+        const usersByEmails: UserViewModel[] = await usersRepository.readAll(filterEmail)
         if (usersByEmails.length) {
             const result: APIErrorResult = { errorsMessages: [{ message: "email exist", field: "email" }] }
             return res.status(400).json(result)
@@ -72,7 +72,7 @@ class AuthController {
         // })
         const element: Omit<RegistrationCodeViewModel, 'id'> = { email, code, expirationDate, userId }
         // const element: Omit<RegistrationCodeViewModel, 'id'> = { email, code, expirationDate, userId, restartTime }
-        await registrationCodesRepository.createOne<RegistrationCodeViewModel>(element)
+        await registrationCodesRepository.createOne(element)
 
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 
@@ -83,7 +83,7 @@ class AuthController {
     ) {
 
         const code = req.body.code
-        const codes = await registrationCodesRepository.readAll<RegistrationCodeViewModel>({ code })
+        const codes = await registrationCodesRepository.readAll({ code })
 
         if (!codes.length) {
             const result: APIErrorResult = { errorsMessages: [{ message: "code not found", field: "code" }] }
@@ -95,11 +95,11 @@ class AuthController {
         }
 
         const userId = codes[0].userId
-        await usersRepository.updateOne<UserBdModel>(userId, { confirm: true })
+        await usersRepository.updateOne(userId, { confirm: true })
 
-        const codesUser = await registrationCodesRepository.readAll<RegistrationCodeViewModel>({ userId })
+        const codesUser = await registrationCodesRepository.readAll({ userId })
         await Promise.all(codesUser.map(async ({ id }) => {
-            await registrationCodesRepository.deleteOne<RegistrationCodeViewModel>(id)
+            await registrationCodesRepository.deleteOne(id)
         }))
 
         res.sendStatus(204)
@@ -110,7 +110,7 @@ class AuthController {
     ) {
         const email = req.body.email
         const filterEmail: Partial<RegistrationCodeViewModel> = { email }
-        const codes = await registrationCodesRepository.readAll<RegistrationCodeViewModel>( filterEmail )
+        const codes = await registrationCodesRepository.readAll( filterEmail )
         if (!codes.length) {
             const result: APIErrorResult = { errorsMessages: [{ message: "active code not found", field: "email" }] }
             return res.status(400).json(result)
@@ -148,7 +148,7 @@ class AuthController {
         // })
         const element: Omit<RegistrationCodeViewModel, 'id'> = { email, code, expirationDate, userId: codes[0].userId }
         // const element: Omit<RegistrationCodeViewModel, 'id'> = { email, code, expirationDate, userId: codes[0].userId, restartTime }
-        await registrationCodesRepository.createOne<RegistrationCodeViewModel>(element)
+        await registrationCodesRepository.createOne(element)
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
 }

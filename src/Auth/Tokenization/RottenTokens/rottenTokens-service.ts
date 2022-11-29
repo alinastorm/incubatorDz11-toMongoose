@@ -14,7 +14,7 @@ export function createOneCanceledToken(reqRefreshToken: string) {
 }
 /** Deprecated */
 export function deleteAllCanceledTokens() {
-    rottenTokensRepository.readAll<RottenToken>().then((tokens) => {
+    rottenTokensRepository.readAll().then((tokens) => {
         tokens.forEach(token => {
             if (token.expirationDate < new Date()) {
                 rottenTokensRepository.deleteOne(token.id)

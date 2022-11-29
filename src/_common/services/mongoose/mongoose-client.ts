@@ -22,10 +22,10 @@ export class MongooseClinet {
     dbConnection: mongoose.Connection = mongoose.connection
 
     async connect() {
-        this.dbConnection.on("connecting", () => console.log("MongooseAdapter..."))
-        this.dbConnection.on("open", () => console.log("MongooseAdapter started"))
-        this.dbConnection.on("error", (err) => console.log("Mongoose error :", err))
-        this.dbConnection.on("close", () => console.log("Mongoose connection close "))
+        this.dbConnection.on("connecting", () => console.log("MongooseClient..."))
+        this.dbConnection.on("open", () => console.log("MongooseClient started"))
+        this.dbConnection.on("error", (err) => console.log("MongooseClient error :", err))
+        this.dbConnection.on("close", () => console.log("MongooseClient connection close "))
 
         await mongoose.connect(mongoAtlasUri, options)
     }

@@ -5,7 +5,7 @@ export interface SearchPaginationMongooseModel<T = IObject> {
     /**search Name Term
      * Default value : null
      */
-    filter?: FilterQuery<T>
+    filter?: FilterQuery<Partial<T>>
     /**PageNumber is number of portions that should be returned.
      * Default value : 1
      */

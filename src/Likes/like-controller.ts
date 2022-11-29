@@ -20,16 +20,16 @@ class likeController {
         const userId = req.user!.userId
         //проверка есть ли комменатрий по commentId
         const commentId = req.params.commentId
-        const comment = await commentsRepository.readOne<CommentBdModel>(commentId)
+        const comment = await commentsRepository.readOne(commentId)
         if (!comment) return res.sendStatus(404)
         //читаем like если не было лайков создаем дефолтный
-        const likes = await likeRepository.readAll<LikesBdModel>({ commentId, userId })
+        const likes = await likeRepository.readAll({ commentId, userId })
         let userLike: LikesBdModel | undefined | null = likes[0]
         let likeId: string = userLike?.id
         if (!likeId) {
             const elementLike: Omit<LikesBdModel, "id"> = { commentId, myStatus: LikeStatus.None, userId }
-            likeId = await likeRepository.createOne<LikesBdModel>(elementLike)
-            userLike = await likeRepository.readOne<LikesBdModel>(likeId)
+            likeId = await likeRepository.createOne(elementLike)
+            userLike = await likeRepository.readOne(likeId)
         }
 
         //обновление comments.likesInfo
@@ -62,11 +62,11 @@ class likeController {
                 newLikesInfo.likesCount--
             }
         }
-        await commentsRepository.updateOne<CommentBdModel>(commentId, { likesInfo: newLikesInfo })
+        await commentsRepository.updateOne(commentId, { likesInfo: newLikesInfo })
         //обновляем myLike
         const elementUpdate: Partial<LikesBdModel> = { myStatus }
-        await likeRepository.updateOne<LikesBdModel>(likeId, elementUpdate)
-        const sa = await likeRepository.readOne<LikesBdModel>(likeId)
+        await likeRepository.updateOne(likeId, elementUpdate)
+        const sa = await likeRepository.readOne(likeId)
         //отправка результата
         res.sendStatus(204)
     }

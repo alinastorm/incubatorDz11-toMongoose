@@ -118,7 +118,7 @@ describe(`${mainRout}`, () => {
         expect(status).toBe(204)
     })
     xtest(`GET ${mainRout} =[null]`, async () => {
-        const comments = await commentsRepository.readAll<CommentBdModel>()
+        const comments = await commentsRepository.readAll()
         expect(comments).toStrictEqual([])
 
     })

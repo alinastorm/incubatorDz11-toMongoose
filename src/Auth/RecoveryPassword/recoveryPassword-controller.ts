@@ -57,17 +57,17 @@ class RecoveryPasswordController {
         const { newPassword, recoveryCode } = req.body
         //проверка recovery code
         const passwordFilter: Partial<RecoveryCodeBdModel> = { recoveryCode }
-        const codes = await recoveryPasswordRepository.readAll<RecoveryCodeBdModel>(passwordFilter)
+        const codes = await recoveryPasswordRepository.readAll(passwordFilter)
         if (!codes.length) return res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
         //поиск usera по email
         const email = codes[0].email
         const userFilter: Partial<UserViewModel> = { email }
-        const users = await usersRepository.readAll<UserViewModel>(userFilter)
+        const users = await usersRepository.readAll(userFilter)
         if (!users.length) res.sendStatus(400)
         //запись нового хэша пароля
         const userId = users[0].id
         const authFilter: Partial<AuthBDModel> = { userId }
-        const auths = await authRepository.readAll<AuthBDModel>(authFilter)
+        const auths = await authRepository.readAll(authFilter)
         const authId = auths[0].id
         const passwordHash = await cryptoService.generatePasswordHash(newPassword)
         const data: Pick<AuthViewModel, "passwordHash"> = { passwordHash }

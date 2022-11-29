@@ -1,6 +1,6 @@
 import { IObject } from '../../types/types';
-import mongoose, { Document, FilterQuery, Model } from 'mongoose';
-import { Paginator, SearchPaginationMongoDbModel } from './repository-mongodb-types';
+import { FilterQuery, Model } from 'mongoose';
+import { Paginator } from './repository-mongodb-types';
 import { ObjectId } from 'mongodb';
 import { SearchPaginationMongooseModel } from './repository-mongoose-type';
 
@@ -9,7 +9,7 @@ export class RepositoryMongoose<T extends IObject> {
 
     constructor(private model: Model<T>) { }
 
-    async readAll(filter?: Partial<T>, sortBy = "_id", sortDirection: 1 | -1 = 1): Promise<T[]> {
+    async readAll(filter?: FilterQuery<Partial<T>>, sortBy = "_id", sortDirection: 1 | -1 = 1): Promise<T[]> {
         if (filter) {
             return (await this.model
                 .find(filter)
@@ -31,7 +31,7 @@ export class RepositoryMongoose<T extends IObject> {
                 return { id: _id.toString(), ...other } as unknown as T
             })
     }
-    async readCount(filter?: Partial<T>) {
+    async readCount(filter?: FilterQuery<Partial<T>>) {
         if (filter) return await this.model.countDocuments(filter)
         return await this.model.countDocuments()
     }

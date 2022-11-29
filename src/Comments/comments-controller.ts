@@ -11,6 +11,8 @@ import { Filter } from 'mongodb';
 import postsRepository from '../Posts/posts-repository';
 import usersRepository from '../Users/users-repository';
 import { UserViewModel } from '../Users/users-types';
+import { SearchPaginationMongooseModel } from '../_common/abstractions/Repository/repository-mongoose-type';
+import { FilterQuery } from 'mongoose';
 
 
 // делаем контроллеры комментов в коментах
@@ -25,11 +27,11 @@ class CommentsController {
         res: ResponseWithBodyCode<CommentViewModel, 201 | 401 | 404>
     ) {
         const postId = req.params.postId
-        const post = await postsRepository.readOne<CommentBdModel>(postId)
+        const post = await postsRepository.readOne(postId)
         if (!post) return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
 
         const userId = req.user.userId
-        const user = await usersRepository.readOne<UserViewModel>(userId)
+        const user = await usersRepository.readOne(userId)
         if (!user) return res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
 
         const { login: userLogin } = user
@@ -38,9 +40,9 @@ class CommentsController {
 
         const likesInfo: LikesInfoViewModel = { dislikesCount: 0, likesCount: 0, myStatus: LikeStatus.None }
         const element: Omit<CommentBdModel, 'id'> = { content, userId, userLogin, createdAt, postId, likesInfo }
-        const idComment: string = await commentsRepository.createOne<CommentBdModel>(element)
+        const idComment: string = await commentsRepository.createOne(element)
         {
-            const comment = await commentsRepository.readOne<CommentBdModel>(idComment)
+            const comment = await commentsRepository.readOne(idComment)
             if (!comment) return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
             const { postId, ...other } = comment
             const mapComment: NoExtraProperties<CommentViewModel, typeof other> = other
@@ -49,7 +51,7 @@ class CommentsController {
     }
     async readAll(req: Request, res: ResponseWithBodyCode<CommentBdModel[], 200>) {
         // TODO если есть access token сетим like Status
-        const result = await commentsRepository.readAll<CommentBdModel>()
+        const result = await commentsRepository.readAll()
         res.send(result)
     }
     async readAllByPostIdPaginationSort(
@@ -60,12 +62,12 @@ class CommentsController {
 
         const { pageNumber, pageSize, sortBy, sortDirection } = req.query
         const postId = req.params.postId
-        const filter: Filter<CommentBdModel> = { postId }
-        const query: SearchPaginationMongoDbModel<CommentBdModel> = { pageNumber, pageSize, sortBy, sortDirection, filter }
+        const filter: FilterQuery<CommentBdModel> = { postId }
+        const query: SearchPaginationMongooseModel<CommentBdModel> = { pageNumber, pageSize, sortBy, sortDirection, filter }
         {
             //если есть acccess token
             const userId = req.user?.userId
-            const comments = await commentsRepository.readAllOrByPropPaginationSort<CommentBdModel>(query)
+            const comments = await commentsRepository.readAllOrByPropPaginationSort(query)
             const { items, ...other } = comments
             let mapComments: Paginator<CommentViewModel>
             // если есть access token сетим like status
@@ -73,7 +75,7 @@ class CommentsController {
                 mapComments = {
                     items: await Promise.all(items.map(async (el) => {
                         const { postId, ...other } = el
-                        const likes = await likesRepository.readAll<LikesBdModel>({ commentId: el.id, userId })
+                        const likes = await likesRepository.readAll({ commentId: el.id, userId })
                         const like = likes[0]
                         const status = like ? like.myStatus : LikeStatus.None
                         other.likesInfo.myStatus = status
@@ -101,14 +103,14 @@ class CommentsController {
         res: ResponseWithBodyCode<CommentViewModel, 200 | 404>
     ) {
         const commentId = req.params.commentId
-        const comment = await commentsRepository.readOne<CommentBdModel>(commentId)
+        const comment = await commentsRepository.readOne(commentId)
         if (!comment) return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
         const { postId, ...other } = comment//TODO повесить защиту типа
         const result = other
         //если есть acccess token
         const userId = req.user?.userId
         if (userId) {
-            const likes = await likesRepository.readAll<LikesBdModel>({ commentId, userId })
+            const likes = await likesRepository.readAll({ commentId, userId })
             const like = likes[0]
             const status = like ? like.myStatus : LikeStatus.None
             result.likesInfo.myStatus = status
@@ -126,7 +128,7 @@ class CommentsController {
         const { commentId } = req.params
         const content = req.body.content
         const userId = req.user.userId
-        const comment = await commentsRepository.readOne<CommentBdModel>(commentId)
+        const comment = await commentsRepository.readOne(commentId)
         if (!comment) return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
         if (comment.userId !== userId) return res.sendStatus(HTTP_STATUSES.NO_ACCESS_CONTENT_403)
         const isUpdated = await commentsRepository.updateOne(commentId, { content })
@@ -142,7 +144,7 @@ class CommentsController {
     ) {
         const { commentId } = req.params
         const userId = req.user.userId
-        const comment = await commentsRepository.readOne<CommentBdModel>(commentId)
+        const comment = await commentsRepository.readOne(commentId)
         if (!comment) return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
         if (comment.userId !== userId) return res.sendStatus(HTTP_STATUSES.NO_ACCESS_CONTENT_403)
         const isDeleted = await commentsRepository.deleteOne(commentId)

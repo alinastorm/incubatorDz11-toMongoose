@@ -7,6 +7,8 @@ import { AuthViewModel } from '../Auth/Authentication/auth-types';
 import { BlogViewModel } from '../Blogs/blogs-types';
 import { HTTP_STATUSES, RequestWithBody, RequestWithParams, RequestWithQuery, ResponseWithBodyCode, ResponseWithCode } from '../_common/services/http/types';
 import { Paginator, SearchPaginationMongoDbModel } from '../_common/abstractions/Repository/repository-mongodb-types';
+import { SearchPaginationMongooseModel } from '../_common/abstractions/Repository/repository-mongoose-type';
+import { FilterQuery } from 'mongoose';
 
 
 class UserController {
@@ -18,15 +20,15 @@ class UserController {
 
         const { pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection } = req.query
 
-        const filter: Filter<UserViewModel> = { $or: [] }
+        const filter: FilterQuery<UserViewModel> = { $or: [] }
         if (searchEmailTerm) filter.$or?.push({ email: { $regex: searchEmailTerm, $options: 'i' } })
         if (searchLoginTerm) filter.$or?.push({ login: { $regex: searchLoginTerm, $options: 'i' } })
-        let query: SearchPaginationMongoDbModel
+        let query: SearchPaginationMongooseModel
         filter.$or?.length ?
             query = { pageNumber, pageSize, filter, sortBy, sortDirection } :
             query = { pageNumber, pageSize, sortBy, sortDirection }
 
-        const users = await usersRepository.readAllOrByPropPaginationSort<UserBdModel>(query)
+        const users = await usersRepository.readAllOrByPropPaginationSort(query)
         const result: Paginator<UserViewModel> = users
         result.items = users.items.map(({ email, id, login, createdAt }): UserViewModel => {
             return { email, id, login, createdAt }

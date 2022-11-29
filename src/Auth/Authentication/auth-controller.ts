@@ -26,7 +26,7 @@ class AuthController {
     ) {
         const { loginOrEmail, password } = req.body
         // Проверяем существование юзера с указанным логином
-        const users: UserBdModel[] | [] = await usersRepository.readAll<UserBdModel>({ $or: [{ login: loginOrEmail }, { email: loginOrEmail }] })
+        const users: UserBdModel[] | [] = await usersRepository.readAll({ $or: [{ login: loginOrEmail }, { email: loginOrEmail }] })
         const user = users[0]
         if (!user) return res.status(HTTP_STATUSES.UNAUTHORIZED_401).send("No login")
         // Проверяем подтверждение почты пользователя
@@ -34,7 +34,7 @@ class AuthController {
         // Достаем hash юзера
         // Проверяем существование hash в bd
         const userId = user.id
-        const auths = await authRepository.readAll<AuthViewModel>({ userId })
+        const auths = await authRepository.readAll({ userId })
         const auth = auths[0]
         if (!auth) return res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401).send("No auth")
         // Проверка равенства пароля и hasha в bd
@@ -75,7 +75,7 @@ class AuthController {
         // createOneCanceledToken(reqRefreshToken)
 
         const { deviceId, userId } = req.user
-        const deviceSessions = await deviceSessionsRepository.readAll<DeviceBdModel>({ deviceId, userId })
+        const deviceSessions = await deviceSessionsRepository.readAll({ deviceId, userId })
         deviceSessions.forEach(async ({ id }) => {
             await deviceSessionsRepository.deleteOne(id)
         })

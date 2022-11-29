@@ -15,7 +15,7 @@ class DeviceController {
         res: ResponseWithBodyCode<DeviceViewModel[], 200>
     ) {
         const userId = req.user.userId
-        const deviceSessions = await devicesRepository.readAll<DeviceBdModel>({ userId })
+        const deviceSessions = await devicesRepository.readAll({ userId })
         const result: DeviceViewModel[] = deviceSessions.map(({ deviceId, ip, title, lastActiveDate }) => {
             return { deviceId, ip, title, lastActiveDate: new Date(+lastActiveDate * 1000).toISOString() }
         })
@@ -28,7 +28,7 @@ class DeviceController {
     ) {
         const userId = req.user.userId
         const tokenDeviceId = req.user.deviceId
-        const deviceSessions = await devicesRepository.readAll<DeviceBdModel>({ userId })
+        const deviceSessions = await devicesRepository.readAll({ userId })
         deviceSessions.forEach((session) => {
             if (session.deviceId != tokenDeviceId) devicesRepository.deleteOne(session.id)
         })
@@ -43,7 +43,7 @@ class DeviceController {
         // const tokenDeviceId = req.user?.deviceId
         const uriDeviceId = req.params.deviceId
         //проверяем существование сессии по uriDeviceId
-        const deviceSessionsByTokenDeviceId = await devicesRepository.readAll<DeviceBdModel>({ deviceId: uriDeviceId })
+        const deviceSessionsByTokenDeviceId = await devicesRepository.readAll({ deviceId: uriDeviceId })
         if (!deviceSessionsByTokenDeviceId.length) return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
         //фильтруем сессии uriDeviceId по владельцу userId из токена
         const filterSessionsByUserId = deviceSessionsByTokenDeviceId.filter((ds) => {

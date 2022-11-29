@@ -26,9 +26,9 @@ class TokensController {
         const { userId, deviceId } = req.user
         const iat: number = jwtTokenService.getIatFromToken(refreshToken) //iat from token
         const lastActiveDate = iat.toString()
-        const deviceSessionsByUserDeviceDate = await deviceSessionRepository.readAll<DeviceBdModel>({ userId, deviceId, lastActiveDate })
+        const deviceSessionsByUserDeviceDate = await deviceSessionRepository.readAll({ userId, deviceId, lastActiveDate })
         const deviceSessionBd: DeviceBdModel = deviceSessionsByUserDeviceDate[0]
-        const deviceSessionsByDevice = await deviceSessionRepository.readAll<DeviceBdModel>({ userId, deviceId })
+        const deviceSessionsByDevice = await deviceSessionRepository.readAll({ userId, deviceId })
         // проверка  на перехват сессии . Будет другая дата
         if (!deviceSessionBd) {
             if (deviceSessionsByDevice) {
@@ -67,7 +67,7 @@ class TokensController {
         const id = deviceSessionBd.id
         const updateData = { lastActiveDate: newLastActiveDate }
         // const data = { ...deviceSessionBd, lastActiveDate: newLastActiveDate }
-        await deviceSessionRepository.updateOne<DeviceBdModel>(id, updateData)
+        await deviceSessionRepository.updateOne(id, updateData)
         //deprecated //добавляем в списаные
         // const reqRefreshToken = req.cookies.refreshToken
         // createOneCanceledToken(reqRefreshToken)
