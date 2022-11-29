@@ -9,4 +9,4 @@ export const rottenTokenSchema = new mongoose.Schema<RottenToken>({
     id: String,
     refreshToken: String,
     expirationDate: Date
-})
+}, { versionKey: false })

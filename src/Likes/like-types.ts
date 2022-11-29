@@ -20,5 +20,8 @@ export const likeBdSchema = new mongoose.Schema<LikesBdModel>({
     id: String,
     commentId: String,
     userId: String,
-    myStatus: LikeStatus //	h11.LikeStatusstring Enum:    Array[3]  
-})
+    myStatus: {
+        type: String,
+        enum: LikeStatus
+    } //	h11.LikeStatusstring Enum:    Array[3]  
+}, { versionKey: false })

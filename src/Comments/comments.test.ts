@@ -1,13 +1,13 @@
 import request from "supertest"
-import mongoDbClient from "../_common/services/mongoDb/mongoDbClient"
 import httpService from "../_common/services/http/http-service"
 import { Paginator } from "../_common/abstractions/Repository/repository-mongodb-types"
-import { CommentBdModel, CommentInputModel, CommentViewModel, LikesInfoViewModel } from "./comments-types"
+import {  CommentInputModel, CommentViewModel, LikesInfoViewModel } from "./comments-types"
 import commentsRepository from "./comments-repository"
 import { PostInputModel, PostViewModel } from "../Posts/posts-types"
 import { UserInputModel } from "../Users/users-types"
 import { LoginInputModel } from "../Auth/Authentication/auth-types"
 import { BlogInputModel, BlogViewModel } from "../Blogs/blogs-types"
+import mongooseClinet from "../_common/services/mongoose/mongoose-client"
 
 
 //Express
@@ -23,8 +23,8 @@ describe(`${mainRout}`, () => {
 
     beforeAll(async () => {
         //Конектим mongo клиента
-        await mongoDbClient.disconnect();
-        await mongoDbClient.connect()
+        await mongooseClinet.disconnect();
+        await mongooseClinet.connect()
         //Устанавливаем роуты и middlewares
         httpService.setMiddlewares()
         httpService.setRoutes()

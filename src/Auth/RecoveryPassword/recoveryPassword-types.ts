@@ -18,5 +18,5 @@ export const recoveryCodeSchema = new mongoose.Schema<RecoveryCodeBdModel>({
     id: String,
     recoveryCode: String,
     email: String,//    pattern: ^ [\w -\.] +@([\w -] +\.) +[\w -]{ 2, 4 } $    
-})
+}, { versionKey: false })
 

@@ -6,10 +6,10 @@ import mongooseClinet from './_common/services/mongoose/mongoose-client';
 
 
 await mongooseClinet.connect()
-await mongoDbClient.connect()
-await mongoDbClient.ping()
+// await mongoDbClient.connect()
+// await mongoDbClient.ping()
 await emailService.connect()
-periodicTasks.run()
+// periodicTasks.run()
 httpService.setMiddlewares()
 httpService.setRoutes()
 httpService.runHttpsServer()

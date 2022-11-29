@@ -17,7 +17,7 @@ const options = {
 }
 const mongoAtlasUri = process.env.MONGO_URL_ATLAS || "MONGOOSE error: NO URI ATLAS "
 
-export class MongooseClinet {
+ class MongooseClinet {
 
     dbConnection: mongoose.Connection = mongoose.connection
 

@@ -25,4 +25,4 @@ export const registrationCodeSchema = new mongoose.Schema<RegistrationCodeViewMo
     code: String,
     expirationDate: Date
     // restartTime: Date
-})
+}, { versionKey: false })

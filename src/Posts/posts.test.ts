@@ -1,9 +1,9 @@
 import request from "supertest"
-import mongoDbClient from "../_common/services/mongoDb/mongoDbClient"
 import httpService from "../_common/services/http/http-service"
 import { BlogInputModel, BlogViewModel } from "../Blogs/blogs-types"
 import { Paginator } from "../_common/abstractions/Repository/repository-mongodb-types"
 import { PostInputModel, PostViewModel } from "./posts-types"
+import mongooseClinet from "../_common/services/mongoose/mongoose-client"
 
 
 //Express
@@ -20,7 +20,8 @@ describe("Posts", () => {
     beforeAll(async () => {
         //Конектим mongo клиента
         // await mongoDbClient.disconnect();
-        await mongoDbClient.connect()
+        await mongooseClinet.disconnect();
+        await mongooseClinet.connect()
         //Устанавливаем роуты и middlewares
         httpService.setMiddlewares()
         httpService.setRoutes()

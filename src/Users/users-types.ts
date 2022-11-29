@@ -15,7 +15,7 @@ export interface UserBdModel {
     id: string
     login: string
     email: string
-    confirm:boolean //мое
+    confirm: boolean //мое
     createdAt?: string //	TODO в дз не обязательный в интерфей
 }
 export interface UsersSearchPaginationMongoDbModel {
@@ -44,4 +44,10 @@ export interface UsersSearchPaginationMongoDbModel {
      */
     sortDirection: 1 | -1
 }
-export const userBdSchema = new mongoose.Schema<UserBdModel>({})
+export const userBdSchema = new mongoose.Schema<UserBdModel>({
+    id: String,
+    login: String,
+    email: String,
+    confirm: Boolean, //мое
+    createdAt: String, //	TODO в дз не обязательный в интерфей
+}, { versionKey: false })

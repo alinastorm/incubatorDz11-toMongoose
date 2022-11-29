@@ -33,4 +33,4 @@ export const blogBdSchema = new mongoose.Schema<BlogBdModel>({
     description:String, // maxLength: 500
     websiteUrl: String,
     createdAt: String,//TODO в дз не обязательный в интерфейсе
-})
+}, { versionKey: false })

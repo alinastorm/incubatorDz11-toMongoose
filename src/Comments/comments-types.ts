@@ -44,8 +44,8 @@ export const likesInfoBdModel = new mongoose.Schema<LikesInfoBdModel>({
     /** Total dislikes for parent item */
     dislikesCount: Number, //	integer($int32)    
     /** Send None if you want to unlike\undislike */
-    myStatus: LikeStatus //	h11.LikeStatusstring Enum:    Array[3]
-})
+    myStatus: { type: String, enum: LikeStatus } //	h11.LikeStatusstring Enum:    Array[3]
+}, { versionKey: false, _id : false })
 export const commentBdSchema = new mongoose.Schema<CommentBdModel>({
     id: String, //nullable: true
     content: String,
@@ -54,4 +54,4 @@ export const commentBdSchema = new mongoose.Schema<CommentBdModel>({
     postId: String,
     createdAt: String,//($date-time)
     likesInfo: likesInfoBdModel
-})
+}, { versionKey: false })

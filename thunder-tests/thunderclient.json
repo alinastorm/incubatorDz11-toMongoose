@@ -325,11 +325,11 @@
     "method": "GET",
     "sortNum": 30000,
     "created": "2022-11-28T11:47:42.916Z",
-    "modified": "2022-11-28T12:42:24.005Z",
+    "modified": "2022-11-29T20:14:16.248Z",
     "headers": [
       {
         "name": "Authorization",
-        "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Mzg0YThhMGFjMmNiY2FkZDUyZDNlNjciLCJpYXQiOjE2Njk2MzkxOTIsImV4cCI6MTY2OTYzOTQ5Mn0.aGSMkwU9m9fu5uAPZeJBtxIbZ2RnDUNVqd5KU4fvUk4"
+        "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Mzg2Njc4ZjFjODE3N2I3MzY0ZjJmNjMiLCJpYXQiOjE2Njk3NTI4NDAsImV4cCI6MTY2OTc1MzE0MH0.cTgawQCrDHVEIo6MNujlFmH-jVS7RnxFb4V64g7GVzY"
       }
     ],
     "params": [],
@@ -346,5 +346,26 @@
     "created": "2022-11-28T13:20:03.164Z",
     "modified": "2022-11-28T13:20:03.164Z",
     "headers": []
+  },
+  {
+    "_id": "951f4568-8480-4806-a713-7a5251abd957",
+    "colId": "57849c66-407a-4809-97b5-c0ed2b105fba",
+    "containerId": "",
+    "name": "delete user",
+    "url": "https://ubt.by:9002/users/6386694ae31d6e52dd79cfe4",
+    "method": "DELETE",
+    "sortNum": 50000,
+    "created": "2022-11-29T20:19:41.170Z",
+    "modified": "2022-11-29T20:20:50.026Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "basic",
+      "basic": {
+        "username": "admin",
+        "password": "qwerty"
+      }
+    },
+    "tests": []
   }
 ]

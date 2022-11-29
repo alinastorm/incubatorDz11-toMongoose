@@ -79,15 +79,16 @@ export class RepositoryMongoose<T extends IObject> {
         return result
     }
     async readOne(id: string): Promise<T> {
-        const result: any = await this.model.findOne({ _id: new ObjectId(id) })
+        const result: any = await this.model.findOne({ _id: new ObjectId(id) }).lean()
         if (!result) return result
         const { _id, ...other } = result
         return { id: _id.toString(), ...other }
     }
     async createOne(element: Omit<T, "id">): Promise<string> {
-        const result = (await this.model.create(element)).insertedId.toString()
+        const objectId:any = (await this.model.create(element))._id
+        const id = objectId.toString()
         // if (result) return id
-        return result
+        return id
     }
     async updateOne(id: string, data: Partial<T>) {
         const result = await this.model.updateOne({ _id: new ObjectId(id) }, { $set: data })

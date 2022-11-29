@@ -42,4 +42,4 @@ export const authSchema = new mongoose.Schema<AuthBDModel>({
     /**  maxLength: 20 minLength: 6 */
     passwordHash: String,
     createdAt: String,
-})
+}, { versionKey: false })

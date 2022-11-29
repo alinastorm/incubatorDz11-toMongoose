@@ -8,6 +8,7 @@ import { UserInputModel } from "../Users/users-types"
 import { LoginInputModel } from "../Auth/Authentication/auth-types"
 import { PostInputModel, PostViewModel } from "../Posts/posts-types"
 import { LikeInputModel, LikeStatus } from "./like-types"
+import mongooseClinet from "../_common/services/mongoose/mongoose-client"
 
 
 //Express
@@ -23,8 +24,8 @@ describe.only(`${mainRout}`, () => {
 
     beforeAll(async () => {
         //Конектим mongo клиента
-        await mongoDbClient.disconnect();
-        await mongoDbClient.connect()
+        await mongooseClinet.disconnect();
+        await mongooseClinet.connect()
         //Устанавливаем роуты и middlewares
         httpService.setMiddlewares()
         httpService.setRoutes()

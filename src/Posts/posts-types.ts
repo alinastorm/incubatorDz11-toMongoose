@@ -32,5 +32,5 @@ export const postBdSchema = new mongoose.Schema<PostBdModel>({
     blogId: String,
     blogName: String,
     createdAt: String,//TODO в дз не обязательный в интерфей
-})
+}, { versionKey: false })
 

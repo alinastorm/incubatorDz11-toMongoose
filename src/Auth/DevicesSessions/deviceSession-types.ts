@@ -37,4 +37,4 @@ export const deviceSessionsSchema = new mongoose.Schema<DeviceBdModel>({
     deviceId: String,
     /**мое юзер так как нужен поиск сессий пользователя */
     userId: String,
-})
+}, { versionKey: false })
