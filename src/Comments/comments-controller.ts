@@ -1,7 +1,6 @@
 import { Request } from 'express';
 
 import commentsRepository from './comments-repository';
-import likesRepository from '../Likes/like-repository';
 import { CommentBdModel, CommentInputModel, CommentViewModel, LikesInfoViewModel } from './comments-types';
 import { HTTP_STATUSES, RequestWithAccessTokenJWTBearer, RequestWithBody, RequestWithHeaders, RequestWithParams, RequestWithParamsBody, RequestWithParamsQuery, ResponseWithBodyCode, ResponseWithCode } from '../_common/services/http/types';
 import { NoExtraProperties } from '../_common/types/types';
@@ -13,6 +12,7 @@ import usersRepository from '../Users/users-repository';
 import { UserViewModel } from '../Users/users-types';
 import { SearchPaginationMongooseModel } from '../_common/abstractions/Repository/repository-mongoose-type';
 import { FilterQuery } from 'mongoose';
+import { likesModel } from '../Likes/like-model';
 
 
 // делаем контроллеры комментов в коментах
@@ -75,7 +75,7 @@ class CommentsController {
                 mapComments = {
                     items: await Promise.all(items.map(async (el) => {
                         const { postId, ...other } = el
-                        const likes = await likesRepository.readAll({ commentId: el.id, userId })
+                        const likes = await likesModel.find({ commentId: el.id, userId })
                         const like = likes[0]
                         const status = like ? like.myStatus : LikeStatus.None
                         other.likesInfo.myStatus = status
@@ -110,7 +110,7 @@ class CommentsController {
         //если есть acccess token
         const userId = req.user?.userId
         if (userId) {
-            const likes = await likesRepository.readAll({ commentId, userId })
+            const likes = await likesModel.find({ commentId, userId })
             const like = likes[0]
             const status = like ? like.myStatus : LikeStatus.None
             result.likesInfo.myStatus = status

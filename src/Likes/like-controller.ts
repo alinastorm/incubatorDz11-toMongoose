@@ -1,7 +1,7 @@
 import commentsRepository from "../Comments/comments-repository"
-import { CommentBdModel, LikesInfoViewModel } from "../Comments/comments-types"
+import { LikesInfoViewModel } from "../Comments/comments-types"
 import { RequestWithAccessTokenJWTBearer, RequestWithBody, RequestWithParams, ResponseWithCode } from "../_common/services/http/types"
-import likeRepository from "./like-repository"
+import { likesModel } from "./like-model"
 import { LikeInputModel, LikesBdModel, LikeStatus } from "./like-types"
 
 
@@ -23,13 +23,19 @@ class likeController {
         const comment = await commentsRepository.readOne(commentId)
         if (!comment) return res.sendStatus(404)
         //читаем like если не было лайков создаем дефолтный
-        const likes = await likeRepository.readAll({ commentId, userId })
-        let userLike: LikesBdModel | undefined | null = likes[0]
-        let likeId: string = userLike?.id
+        const likes = await likesModel.find({ commentId, userId })
+
+        // const likes = await likeRepository.readAll({ commentId, userId })
+        let userLike: LikesBdModel = likes[0]
+        //@ts-ignore
+        let likeId: string = userLike?._id.toString()
         if (!likeId) {
             const elementLike: Omit<LikesBdModel, "id"> = { commentId, myStatus: LikeStatus.None, userId }
-            likeId = await likeRepository.createOne(elementLike)
-            userLike = await likeRepository.readOne(likeId)
+            userLike = await likesModel.create(elementLike)
+            //@ts-ignore
+            likeId = userLike._id.toString()
+            // likeId = await likeRepository.createOne(elementLike)
+            // userLike = await likeRepository.readOne(likeId)
         }
 
         //обновление comments.likesInfo
@@ -65,8 +71,8 @@ class likeController {
         await commentsRepository.updateOne(commentId, { likesInfo: newLikesInfo })
         //обновляем myLike
         const elementUpdate: Partial<LikesBdModel> = { myStatus }
-        await likeRepository.updateOne(likeId, elementUpdate)
-        const sa = await likeRepository.readOne(likeId)
+        await likesModel.updateOne({ _id: likeId }, elementUpdate, { upsert: false })
+
         //отправка результата
         res.sendStatus(204)
     }

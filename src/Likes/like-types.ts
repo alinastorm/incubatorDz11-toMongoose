@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+
 
 export interface LikeInputModel {
     likeStatus: LikeStatus
@@ -16,12 +16,3 @@ export enum LikeStatus {
     Dislike = "Dislike"
 }
 
-export const likeBdSchema = new mongoose.Schema<LikesBdModel>({
-    id: String,
-    commentId: String,
-    userId: String,
-    myStatus: {
-        type: String,
-        enum: LikeStatus
-    } //	h11.LikeStatusstring Enum:    Array[3]  
-}, { versionKey: false })
